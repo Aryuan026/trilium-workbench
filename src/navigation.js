@@ -1,7 +1,7 @@
 // Native custom-launcher widget; workbench data stays in the existing catalog.
 const backend = await (await api.getNote('twNavigationActions')).getContent();
 const tools = [
-    ['searchNotes','搜索','bx-search'], ['createNoteIntoInbox','新建笔记','bx-plus'],
+    ['searchNotes','查找资料','bx-search'], ['createNoteIntoInbox','新建笔记','bx-plus'],
     ['showRecentChanges','最近更改','bx-history'], ['showDeletedNotes','回收站','bx-trash-alt'], ['showOptions','软件设置','bx-cog']
 ];
 const glyphs = ['','📋','📁','🔬','📚','🧰','🗓'];
@@ -51,6 +51,7 @@ class WorkbenchNavigation extends api.NoteContextAwareWidget {
         await api.triggerCommand('showLeftPane',{});
         await api.activateNote(rootId);
     }
+    runTool(command) { return command === 'searchNotes' ? api.activateNote('twFind') : api.triggerCommand(command,{}); }
     paint() {
         const {preferences,entries} = this.state;
         document.body.classList.toggle('tw-show-tree',preferences.showTree);
@@ -99,7 +100,7 @@ class WorkbenchNavigation extends api.NoteContextAwareWidget {
         if (!preferences.shortcuts.some(s=>s.pinned)) this.side.append(element('p','tw-nav-empty','点 ＋ 添加常用工作台'));
         railButton('bx-plus','添加入口',()=>this.customize());
         const divider = element('div','tw-rail-divider'); rail.append(divider);
-        for (const [command,label,glyph] of tools.filter(t=>preferences.tools.includes(t[0]))) railButton(glyph,label,()=>api.triggerCommand(command,{}));
+        for (const [command,label,glyph] of tools.filter(t=>preferences.tools.includes(t[0]))) railButton(glyph,label,()=>this.runTool(command),command === 'searchNotes' && active === 'twFind');
         rail.append(element('div','tw-rail-space'));
         railButton('bx-dots-horizontal-rounded','更多工具',()=>this.more());
         this.side.append(button('自定义侧栏','tw-nav-customize',()=>this.customize()));
@@ -162,7 +163,7 @@ class WorkbenchNavigation extends api.NoteContextAwareWidget {
         const dialog=this.dialog('更多工具');
         const list=element('div','tw-more-tools');
         for (const [command,label,glyph] of tools) {
-            const item=button('','',async()=>{dialog.close();await api.triggerCommand(command,{});});item.append(icon(glyph),document.createTextNode(label));list.append(item);
+            const item=button('','',async()=>{dialog.close();await this.runTool(command);});item.append(icon(glyph),document.createTextNode(label));list.append(item);
         }
         list.append(button('⚙  自定义侧栏','',()=>{dialog.close();this.customize();}));dialog.append(list);
         dialog.append(element('p','tw-note',`回收站可恢复已删除笔记；当前自动清除时间为 ${this.state.retentionDays} 天。`));dialog.showModal();

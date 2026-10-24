@@ -249,6 +249,35 @@ body.tw-shell:not(.tw-show-tree) #left-pane .tree,body.tw-shell:not(.tw-show-tre
 .tw-more-tools { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; margin:16px 0; }
 .tw-more-tools button { display:flex; align-items:center; gap:8px; text-align:left; min-height:36px; }
 .tw-nav-rail button:focus-visible,.tw-nav-side button:focus-visible,.tw-tree-toggle:focus-visible { outline:2px solid var(--tw-accent); outline-offset:1px; }
+
+/* Everyday lookup uses native search, with human-facing groups and advanced tools on demand. */
+.tw.tw-find { max-width:960px; }
+.tw-find-form { margin:18px 0 12px; }
+.tw-find-form > label { display:block; font-size:12px; margin-bottom:6px; color:var(--tw-muted); }
+.tw-find-input { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
+.tw-find-input input { flex:1 1 260px; min-width:0; width:100%; }
+.tw-find-filters { display:flex; flex-wrap:wrap; gap:6px; border-bottom:1px solid var(--tw-line); padding-bottom:12px; }
+.tw .tw-find-filters button { border-color:transparent; background:transparent; }
+.tw-find-filters button[aria-pressed=true] { background:var(--tw-selection); border-color:var(--tw-selection); color:var(--tw-strong); font-weight:600; }
+.tw-find-statusbar { display:flex; flex-wrap:wrap; justify-content:space-between; align-items:center; gap:8px; margin:12px 0 8px; }
+.tw-find-statusbar .tw-note { margin:0; }
+.tw-find-statusbar button { border-color:transparent; color:var(--tw-muted); }
+.tw-find-group { margin:0 0 12px; }
+.tw .tw-find-group h2 { color:var(--tw-muted); font-size:12px; font-weight:500; margin:0; padding:6px 0; border-bottom:1px solid var(--tw-line); }
+.tw .tw-find-row { display:flex; min-width:0; align-items:center; gap:12px; padding:12px 8px; border-bottom:1px solid var(--tw-row-line); color:var(--tw-ink); text-decoration:none; border-radius:4px; }
+.tw .tw-find-row:hover { background:var(--tw-chrome); text-decoration:none; }
+.tw-find-icon { flex:none; width:24px; font-size:21px; color:var(--tw-muted); }
+.tw-find-copy { min-width:0; flex:1; }
+.tw-find-copy strong { display:block; font-size:13px; font-weight:500; overflow-wrap:anywhere; }
+.tw-find-copy small { display:block; font-size:12px; color:var(--tw-muted); margin-top:3px; overflow-wrap:anywhere; }
+.tw-find-arrow { color:var(--tw-muted); }
+.tw-find-empty { padding:24px 0; }
+.tw-find-empty h2 { font-size:14px; }
+.tw-find-empty p { color:var(--tw-muted); }
+.tw-find-advanced { border-top:1px solid var(--tw-line); margin-top:20px; padding-top:12px; font-size:12px; }
+.tw-find-advanced summary { width:fit-content; cursor:pointer; color:var(--tw-muted); }
+.tw-find-advanced .tw-actions { justify-content:flex-start; }
+.tw-find a:focus-visible,.tw-find button:focus-visible,.tw-find summary:focus-visible { outline:2px solid var(--tw-accent); outline-offset:2px; }
 @media(max-width:600px) { .tw { padding:16px 12px; } .tw-actions { width:100%; } .tw-toolbar label { flex-basis:100%; } }
 /* Keep the native settings sidebar usable in a narrow desktop window. */
 @media(max-width:700px) {

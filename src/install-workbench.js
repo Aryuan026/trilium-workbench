@@ -23,6 +23,13 @@ function installWorkbench(pkg) {
             note.setContent(JSON.stringify(preferences));
         }
     }
+    function archiveInternalNotes() {
+        for (const spec of pkg.notes.filter(note => (note.type === 'code' && note.noteId !== pkg.dataId) || note.attributes?.some(a => a.type === 'label' && a.name === 'workbenchInternal' && a.value === 'true'))) {
+            const note = api.getNote(spec.noteId); if (!note) continue;
+            const archived = note.getLabel('archived') || note.addLabel('archived');
+            archived.isInheritable = true; archived.save();
+        }
+    }
     const entries = JSON.parse(catalog.getContent());
     const registered = entries.find(p => p.id === pkg.id);
     if (registered && (registered.rootId !== pkg.rootId || registered.version !== pkg.version)) {
@@ -37,6 +44,7 @@ function installWorkbench(pkg) {
         existing.save();
         if (!registered) { entries.push(pkg); catalog.setContent(JSON.stringify(entries)); }
         addShortcut();
+        archiveInternalNotes();
         return existing.noteId;
     }
     for (const spec of pkg.notes) {
@@ -54,5 +62,6 @@ function installWorkbench(pkg) {
     if (pkg.preparationId) home.setRelation('workbenchPreparation', pkg.preparationId);
     if (!registered) { entries.push(pkg); catalog.setContent(JSON.stringify(entries)); }
     addShortcut();
+    archiveInternalNotes();
     return home.noteId;
 }

@@ -71,6 +71,13 @@ body.light-theme #center-pane {
 }
 body.light-theme #center-pane .note-split-title:not(.hide-title) { background:var(--tw-chrome); border-bottom:1px solid var(--tw-line); margin-bottom:8px; }
 body.light-theme #center-pane .inline-title { background:var(--tw-chrome); border-bottom:1px solid var(--tw-line); padding-bottom:12px; }
+body.desktop #center-pane .inline-title { padding:14px 24px 12px; }
+body.desktop #center-pane .inline-title-row { gap:10px; align-items:center; }
+body.desktop #center-pane .inline-title .note-icon { width:36px; height:36px; font-size:23px; line-height:36px; }
+body.desktop #center-pane .inline-title .note-title-widget input.note-title { font-size:18px; line-height:26px; font-weight:600; height:30px; padding:2px 0; }
+body.desktop #center-pane .inline-title .title-details { font-size:11px; line-height:16px; }
+body.desktop #center-pane .inline-title + .title-actions:has(> .note-type-switcher:empty) { height:12px; min-height:0; padding:0; }
+body.desktop #center-pane .note-detail-editable-text-editor { font-size:14px; line-height:22px; }
 body.light-theme .tab-row-container,body.light-theme .tab-row-widget { background:var(--tw-chrome); }
 body .tab-row-widget { font-size:13px; }
 body .tab-row-widget .note-tab .note-tab-wrapper { height:30px; padding:4px 6px 4px 9px; border-radius:5px; }
@@ -147,6 +154,44 @@ body.desktop .help-dialog .help-cards .card { background:var(--tw-chrome); color
 body.desktop .about-dialog h2 { font-size:20px; line-height:28px; }
 body.desktop .about-dialog :is(.property-sheet,footer a) { font-size:13px; }
 body.desktop .about-dialog .build-info { font-size:12px; line-height:18px; }
+
+/* Native hover previews use a reading scale, independent of editor heading sizes. */
+body.desktop .note-tooltip .tooltip-inner { width:min(520px,calc(100vw - 24px)); max-width:min(520px,calc(100vw - 24px)); padding:12px 14px; white-space:normal; border-radius:7px; background:var(--tw-raised)!important; box-shadow:0 8px 28px #30362f24; }
+body.desktop .note-tooltip-content { padding:0; max-height:min(360px,calc(100vh - 80px)); font:13px/20px var(--main-font-family); }
+body.desktop .note-tooltip-title { margin:0 0 12px; font:600 14px/20px var(--main-font-family); white-space:normal; }
+body.desktop .note-tooltip-title .note-title-with-path { display:flex; flex-direction:column; gap:3px; padding-bottom:10px; border-bottom:1px solid var(--tw-line); }
+body.desktop .note-tooltip-title .note-title { font:inherit; }
+body.desktop .note-tooltip-title .note-path { order:-1; font:400 11px/16px var(--main-font-family); color:var(--tw-muted); }
+body.desktop .note-tooltip .ck-content { font:13px/20px var(--main-font-family); }
+body.desktop .note-tooltip .ck-content :is(h1,h2) { font:600 16px/23px var(--main-font-family); margin:16px 0 8px; }
+body.desktop .note-tooltip .ck-content :is(h3,h4,h5,h6) { font:600 14px/21px var(--main-font-family); margin:14px 0 7px; }
+body.desktop .note-tooltip .ck-content > :first-child { margin-top:0; }
+body.desktop .note-tooltip .ck-content p { margin:0 0 10px; }
+body.desktop .note-tooltip .ck-content :is(ol,ul) { padding-inline-start:21px; margin:8px 0 12px; }
+body.desktop .note-tooltip .ck-content li { margin-bottom:7px; }
+body.desktop .note-tooltip .ck-content pre { font-size:12px; line-height:18px; white-space:pre-wrap; overflow-wrap:anywhere; }
+body.desktop .note-tooltip-content .open-popup-button { position:static; display:flex; align-items:center; justify-content:center; width:28px; height:28px; margin:8px 0 0 auto; border-radius:4px; }
+
+/* Keep advanced search controls at the same scale as native dialogs. */
+body.desktop .search-definition-widget { font-size:13px; line-height:20px; }
+body.desktop .search-definition-widget :is(.btn,.form-control,.form-select,.cm-scroller) { font:inherit; }
+body.desktop .search-definition-widget .title-column { vertical-align:top; padding:8px 10px 8px 0; }
+body.desktop .search-definition-widget .add-search-option { vertical-align:top; padding-block:4px; }
+body.desktop .search-definition-widget .add-search-option .btn { width:auto; min-height:30px; padding:4px 10px; margin:0 6px 6px 0; }
+body.desktop .search-definition-widget .add-search-option > .dropdown { display:inline-flex!important; vertical-align:top; }
+body.desktop .search-definition-widget .search-actions-container { flex-wrap:wrap; gap:6px; margin-block:8px; }
+body.desktop .search-definition-widget .search-actions-container .btn { min-height:30px; padding:4px 10px; margin:0; }
+@media (max-width:700px) {
+  body.desktop .search-definition-widget .search-setting-table { width:100%; }
+  body.desktop .search-definition-widget :is(tbody,tr,td) { min-width:0; }
+  body.desktop .search-definition-widget tr { display:flex; flex-wrap:wrap; }
+  body.desktop .search-definition-widget .title-column { width:100%; flex-basis:100%; padding-bottom:4px; }
+  body.desktop .search-definition-widget .add-search-option { display:flex; flex-wrap:wrap; width:100%; }
+  body.desktop .search-definition-widget .search-options td:not(.title-column):not(.button-column) { flex:1; }
+  body.desktop .search-definition-widget .ancestor td > div { flex-wrap:wrap; gap:6px; }
+  body.desktop .search-definition-widget .ancestor .input-group { width:100%; min-width:0; }
+  body.desktop .search-definition-widget .search-actions td { width:100%; }
+}
 
 .tw { color:var(--tw-ink); font:13px/1.45 -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif; max-width:1080px; padding:20px 22px 24px; margin:0 auto; min-width:0; box-sizing:border-box; }
 .tw * { box-sizing:border-box; }

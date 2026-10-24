@@ -25,6 +25,15 @@ function bootstrapWorkspace(bundle) {
     root.setRelation('renderNote', 'twCatalogUI');
     api.getNote('twFind').setRelation('renderNote', 'twFindUI');
     api.getNote('twFind').setLabel('iconClass','bx bx-search');
+    // Reformat the old bundled guide without replacing any edited wording.
+    for (const spec of bundle.packages.flatMap(pkg => pkg.notes).filter(note => note.contentFormat === 'markdown')) {
+        const note = api.getNote(spec.noteId);
+        const legacy = note && /^<h2>[^<]*<\/h2><pre>([\s\S]*)<\/pre>$/.exec(note.getContent());
+        if (legacy) {
+            const markdown = legacy[1].replaceAll('&lt;','<').replaceAll('&gt;','>').replaceAll('&amp;','&').replace(/^# [^\n]+\n+/, '');
+            note.setContent(api.markdownToHtml(markdown));
+        }
+    }
     const installed = JSON.parse(api.getNote('twCatalogData').getContent()).filter(pkg => api.getNote(pkg.rootId));
     const internalIds = ['twResources','twBootstrap',...installed.flatMap(pkg => pkg.notes.filter(note => (note.type === 'code' && note.noteId !== pkg.dataId) || note.attributes?.some(a => a.type === 'label' && a.name === 'workbenchInternal' && a.value === 'true')).map(note => note.noteId))];
     for (const id of internalIds) {

@@ -51,7 +51,7 @@ function installWorkbench(pkg) {
         if (api.getNote(spec.noteId)) throw new Error("工作包笔记编号冲突，未覆盖原数据。");
     }
     for (const spec of pkg.notes) {
-        api.createNewNote({ ...spec, parentNoteId: spec.parentNoteId || "root", isExpanded: false });
+        api.createNewNote({ ...spec, content:spec.contentFormat === 'markdown' ? api.markdownToHtml(spec.content) : spec.content, parentNoteId: spec.parentNoteId || "root", isExpanded: false });
     }
     const home = api.getNote(pkg.rootId);
     home.setLabel("workbenchId", pkg.id);

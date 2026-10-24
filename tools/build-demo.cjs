@@ -14,11 +14,10 @@ const rows = [headers,
 const cellData = Object.fromEntries(rows.map((row,r)=>[r,Object.fromEntries(row.map((v,c)=>[c,{v,t:1}]))]));
 const workbook = {version:1,workbook:{id:'ying-demo',name:'学生总表',appVersion:'0.106.1',locale:'zhCN',sheetOrder:['students'],sheets:{students:{id:'students',name:'学生总表',rowCount:200,columnCount:12,defaultColumnWidth:150,defaultRowHeight:26,cellData,freeze:{xSplit:0,ySplit:1,startRow:1,startColumn:0}}}}};
 const aiGuide = read('AI-GUIDE.md');
-const escapeHTML = s => s.replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
 const pkg = {format:'trilium-workbench-package',schemaVersion:1,id:'ying-students',version:'0.2.0-demo',title:'荧小助 · 学生管理',description:'本地名册、完整表格与资料整理。先在合成资料上试用，再接入已有学生处理流程。',rootId:'twYing',rendererId:'twYingUI',dataId:'twYingSheet',preparationId:'twYingPreparation',notes:[
   note('twYing','root','荧小助 · 学生管理','render','',{notePosition:10}),
   note('twYingSheet','twYing','学生总表','spreadsheet',JSON.stringify(workbook)),
-  note('twYingGuide','twYing','资料准备与 AI 指引','text','<h2>资料准备与 AI 指引</h2><pre>'+escapeHTML(aiGuide)+'</pre>'),
+  note('twYingGuide','twYing','资料准备与 AI 指引','text',aiGuide.replace(/^# [^\n]+\n+/,''),{contentFormat:'markdown'}),
   note('twYingRecovery','twYing','备份与恢复','text','<h2>备份与恢复</h2><p>目录中的「创建完整备份」调用 Trilium 原生备份。通过本项目启动器打开时，退出 Trilium（⌘Q）后会把完整快照写入选定工作区。</p><p>所选工作区文件夹只保存完成的备份和可移植元数据；实际编辑的 SQLite、缓存和机器配置留在本机。</p><p>启动器可把完整 .db 备份恢复到另一个新空目录，找回模块、表格与准备进度；原文件不改。</p><p>目前只验同机未加密 .db 恢复，第二设备、Windows 与加密容器分别验收。</p>'),
   note('twYingSources','twYing','工作包源码','text','<p>此处保存本工作包的界面代码，便于独立导出与审阅。</p>',{attributes:[label('workbenchInternal','true')]}),
   code('twYingUI','twYingSources','学生首页.js',read('ying-home.js')),

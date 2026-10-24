@@ -1,0 +1,10 @@
+work/
+outputs/
+.DS_Store
+.playwright-cli/
+node_modules/
+*.db
+*.db-wal
+*.db-shm
+.env
+.env.*

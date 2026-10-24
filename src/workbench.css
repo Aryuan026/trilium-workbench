@@ -256,6 +256,11 @@ body.tw-shell:not(.tw-show-tree) #left-pane .tree,body.tw-shell:not(.tw-show-tre
 .tw-find-form > label { display:block; font-size:12px; margin-bottom:6px; color:var(--tw-muted); }
 .tw-find-input { display:flex; flex-wrap:wrap; align-items:center; gap:8px; }
 .tw-find-input input { flex:1 1 260px; min-width:0; width:100%; }
+.tw-find-scope { border:0; padding:0; margin:14px 0; min-width:0; }
+.tw-find-scope legend { float:none; width:auto; font-size:12px; color:var(--tw-muted); margin-bottom:2px; }
+.tw-find-scope label { display:flex; align-items:center; gap:7px; min-height:30px; width:fit-content; cursor:pointer; }
+.tw-find-scope input[type=checkbox] { margin:0; }
+.tw-find-scope .tw-note { margin:2px 0 0; }
 .tw-find-filters { display:flex; flex-wrap:wrap; gap:6px; border-bottom:1px solid var(--tw-line); padding-bottom:12px; }
 .tw .tw-find-filters button { border-color:transparent; background:transparent; }
 .tw-find-filters button[aria-pressed=true] { background:var(--tw-selection); border-color:var(--tw-selection); color:var(--tw-strong); font-weight:600; }

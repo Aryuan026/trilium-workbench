@@ -24,6 +24,24 @@ const root=path.resolve(__dirname,'..');
   const search=async text=>{await find.locator('input[type=search]').fill(text);await find.locator('[type=submit]').click();await find.locator('[type=submit]:enabled').waitFor();};
   const clear=async()=>{if(await find.locator('.tw-find-clear').isEnabled())await find.locator('.tw-find-clear').click();await find.locator('[type=submit]:enabled').waitFor();};
   await page.setViewportSize({width:1200,height:860});await open();await clear();await filter('全部');
+  const scope=find.getByRole('checkbox',{name:'也搜索工作台内资料',exact:true});
+  assert(!(await scope.isChecked()));assert.equal(await find.locator('.tw-find-row[href="#twYingSheet"]').count(),0);
+  const fixtureId='scope'+require('node:crypto').randomUUID().replaceAll('-','');
+  try{
+   await backend(`()=>{api.createNewNote({noteId:'${fixtureId}',parentNoteId:'root',title:'合成论文 · 学生参与的光片研究',type:'text',content:'<p>仅用于搜索范围验证。</p>'});return true;}`);
+   await find.locator('.tw-find-refresh').click();await find.locator('[type=submit]:enabled').waitFor();
+   await find.locator(`.tw-find-row[href="#${fixtureId}"]`).waitFor();
+   await search('学生');await find.locator(`.tw-find-row[href="#${fixtureId}"]`).waitFor();
+   assert.equal(await find.locator('.tw-find-row[href="#twYingSheet"]').count(),0);
+   await scope.check();await find.locator('[type=submit]:enabled').waitFor();
+   await find.locator('.tw-find-row[href="#twYingSheet"]').waitFor();
+   await page.screenshot({path:path.join(root,'outputs/包含工作台资料.png'),animations:'disabled'});
+   await scope.uncheck();await find.locator('[type=submit]:enabled').waitFor();
+   assert.equal(await find.locator('.tw-find-row[href="#twYingSheet"]').count(),0);
+   await find.locator(`.tw-find-row[href="#${fixtureId}"]`).waitFor();
+   await page.screenshot({path:path.join(root,'outputs/日常资料搜索范围.png'),animations:'disabled'});
+  }finally{await backend(`()=>{api.getNote('${fixtureId}')?.deleteNote();return true;}`);}
+  await clear();await scope.check();await find.locator('[type=submit]:enabled').waitFor();
   await find.locator('.tw-find-row[href="#twYingSheet"]').waitFor();
   assert.equal(await find.locator('.tw-find-advanced').getAttribute('open'),null);
   assert.equal(await find.locator('.tw-find-native').isVisible(),false);
@@ -52,7 +70,9 @@ const root=path.resolve(__dirname,'..');
    if(!originalTabs.includes(id))await page.locator(`.note-tab[data-ntx-id="${id}"] .note-tab-close`).click();
   }
   await open();
-  await page.reload();await find.locator('.tw-find-row').first().waitFor();
+  await page.reload();await find.locator('[type=submit]:enabled').waitFor();
+  assert(!(await find.getByRole('checkbox',{name:'也搜索工作台内资料',exact:true}).isChecked()));
+  assert.equal(await find.locator('.tw-find-row[href="#twYingSheet"]').count(),0);
   assert.equal(await find.locator('.tw-find-advanced').getAttribute('open'),null);
   await page.mouse.move(1100,100);
   const overflow=[];
@@ -65,7 +85,7 @@ const root=path.resolve(__dirname,'..');
   }
   await page.setViewportSize({width:1200,height:860});
   assert.deepEqual(await state(),before);assert.deepEqual(errors,[]);
-  const report={result:'PASS',checks:['native archive inheritance excludes implementation from ordinary search','technical notes remain retrievable','human categories and empty state','literal keyword search and clear','native spreadsheet and document navigation','advanced search keeps the query','technical source links','refresh','workbook/preparation/navigation preserved'],ids,overflow};
+  const report={result:'PASS',checks:['daily scope excludes workbench root and descendants before native result limit','personal paper mentioning students remains searchable','include-workbenches toggle is reversible and reload defaults to daily','native archive inheritance excludes implementation from ordinary search','technical notes remain retrievable','human categories and empty state','literal keyword search and clear','native spreadsheet and document navigation','advanced search keeps the query','technical source links','refresh','workbook/preparation/navigation preserved'],ids,overflow};
   fs.writeFileSync(path.join(root,'work/find-check.json'),JSON.stringify(report,null,2));console.log(JSON.stringify(report,null,2));
  }finally{await context.tracing.stop({path:path.join(root,'work/search-ui/trace.zip')});await browser.close()}
 })().catch(error=>{console.error(error);process.exitCode=1});

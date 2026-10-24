@@ -1,6 +1,6 @@
 function bootstrapWorkspace(bundle) {
     const root = api.getNote('root');
-    if (root.getLabelValue('workbenchFormat') !== '1' && root.getLabelValue('workbenchDemo') !== 'true' &&
+    if (!['1','2'].includes(root.getLabelValue('workbenchFormat')) && root.getLabelValue('workbenchDemo') !== 'true' &&
         root.getChildNotes().some(n => !n.noteId.startsWith('_') && n.noteId !== 'twBootstrap')) {
         throw new Error('初始化只接受空白或本项目工作区，未修改现有内容。');
     }
@@ -21,7 +21,7 @@ function bootstrapWorkspace(bundle) {
         }
     }
     root.title = '我的工作台'; root.type = 'render'; root.mime = 'text/html'; root.save();
-    root.setLabel('workbenchFormat', '1');
+    root.setLabel('workbenchFormat', root.getLabelValue('workbenchFormat') === '2' ? '2' : '1');
     root.setRelation('renderNote', 'twCatalogUI');
     api.getNote('twFind').setRelation('renderNote', 'twFindUI');
     api.getNote('twFind').setLabel('iconClass','bx bx-search');

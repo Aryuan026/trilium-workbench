@@ -28,6 +28,7 @@ const bundle = {packages:[pkg],notes:[
   note('twFind','root','查找资料','render','<p>按工作台、表格、文档和附件查找自己的资料。</p>',{notePosition:20,attributes:[label('iconClass','bx bx-search')]}),
   note('twResources','root','技术资料','text','<h2>技术资料</h2><p>工作台使用的源码与配置，随完整备份保存。日常查找请打开<a href="#root/twFind">查找资料</a>。</p><h3>界面与导航</h3><ul><li><a href="#root/twResources/twFindUI">查找资料界面</a></li><li><a href="#root/twResources/twCatalogUI">工作台管理界面</a></li><li><a href="#root/twResources/twNavigationWidget">快捷导航</a></li><li><a href="#root/twResources/twCompactShell">紧凑布局</a></li><li><a href="#root/twResources/twStyle">共享样式</a></li></ul><h3>装配与设置</h3><ul><li><a href="#root/twBootstrap">工作区装配</a></li><li><a href="#root/twResources/twInstaller">工作包安装</a></li><li><a href="#root/twResources/twCatalogData">工作包目录配置</a></li><li><a href="#root/twResources/twNavigationData">侧栏偏好</a></li><li><a href="#root/twResources/twNavigationActions">侧栏读写</a></li></ul>',{notePosition:900}),
   code('twFindUI','twResources','查找资料.js',read('find.js')),
+  code('twExternalActions','twResources','外部工作包转接.js',read('external-request.js'),'backend'),
   note('twCatalogData','twResources','私有工作台目录.json','code',JSON.stringify([pkg]),{mime:'application/json'}),
   code('twInstaller','twResources','工作包装配器.js',read('install-workbench.js'),'backend'),
   code('twCatalogUI','twResources','工作台目录.js',read('catalog.js')),

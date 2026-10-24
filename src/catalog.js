@@ -1,6 +1,7 @@
 const host = api.$container[0];
 const entries = JSON.parse(await (await api.getNote("twCatalogData")).getContent());
 const installSource = await (await api.getNote("twInstaller")).getContent();
+const externalPackage = entries.find(pkg=>pkg.notes?.some(note=>note.attributes?.some(attribute=>attribute.type==='label'&&attribute.name==='workbenchExternal')));
 host.innerHTML = `<main class="tw"><p class="tw-eyebrow">我的工作区 / 工作台目录</p><h1>把需要的工作，放在手边。</h1><p class="tw-lead">按需启用，资料留在自己的工作区。打开工作台就能开始。</p><div class="tw-banner">合成资料原型 · 辅助 AI 尚未连接 · 真实学生同步未连接</div><div class="tw-toolbar"><span>本地工作包</span><button class="tw-import">安装本地工作包</button><input class="tw-file" type="file" accept=".json,application/json" hidden></div><section class="tw-catalog"></section><footer><button class="tw-backup">创建完整备份</button><p class="tw-backup-result" aria-live="polite"></p><p>原生备份先保存在本机。通过工作台启动器打开时，退出 Trilium（⌘Q）后会把完整备份保存到你选择的工作区位置。</p><p>辅助 AI：尚未连接。工作包中的指引可交给 WorkBuddy 等外部工具，日常查询和表格编辑照常可用。</p>基于 Trilium Notes · 工作包与个人资料分开保存</footer></main>`;
 const input = host.querySelector('.tw-file');
 const customize = document.createElement('button'); customize.textContent = '自定义侧栏';
@@ -37,11 +38,21 @@ host.querySelector(".tw-backup").onclick = async event => {
     button.disabled = true;
     result.textContent = "正在创建完整备份…";
     try {
+        if (externalPackage) {
+            const source = await (await api.getNote('twExternalActions')).getContent();
+            await api.runAsyncOnBackendWithManualTransactionHandling(source,[externalPackage.rootId,{closeWorkspace:true}]);
+            result.textContent = '正在完成已提交操作并保存完整工作区，请等待启动器确认。'; return;
+        }
         const file = await api.runAsyncOnBackendWithManualTransactionHandling(async () => api.backupNow("workbench-" + Date.now()));
         result.textContent = "备份已完成：" + file;
     } catch (e) { result.textContent = "备份未完成：" + e.message; }
     finally { button.disabled = false; }
 };
+if(externalPackage){
+    host.querySelector('.tw-backup').textContent='保存并退出工作区';
+    const paragraphs=host.querySelectorAll('footer > p');
+    paragraphs[1].textContent='资料库与业务状态一起保存。恢复业务工作区时请选择完整的 workspace.json，不要只选数据库文件。';
+}
 const list = host.querySelector(".tw-catalog");
 for (const pkg of entries) {
     const item = document.createElement("article");

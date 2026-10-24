@@ -328,6 +328,11 @@ body.tw-shell:not(.tw-show-tree) #left-pane .tree,body.tw-shell:not(.tw-show-tre
 .tw-find-advanced summary { width:fit-content; cursor:pointer; color:var(--tw-muted); }
 .tw-find-advanced .tw-actions { justify-content:flex-start; }
 .tw-find a:focus-visible,.tw-find button:focus-visible,.tw-find summary:focus-visible { outline:2px solid var(--tw-accent); outline-offset:2px; }
+.tw-external { min-width:0; width:100%; }
+.tw-external-controls { display:flex; flex-wrap:wrap; justify-content:flex-end; padding:5px 12px; border-bottom:1px solid var(--tw-line); }
+.tw-external-controls button { font:12px/20px var(--main-font-family); padding:3px 8px; border:1px solid var(--tw-input-border); border-radius:4px; background:var(--tw-raised); color:var(--tw-muted); }
+.tw-external-body > .tw-note { padding:20px 22px; }
+.tw-external-frame { display:block; width:100%; height:calc(100vh - 160px); min-height:360px; border:0; background:var(--tw-raised); }
 @media(max-width:600px) { .tw { padding:16px 12px; } .tw-actions { width:100%; } .tw-toolbar label { flex-basis:100%; } }
 /* Keep the native settings sidebar usable in a narrow desktop window. */
 @media(max-width:700px) {
